@@ -39,8 +39,6 @@ def check_wave_hand(base,point):
         plus_flag = False
         minus_flag = False
     
-    
-    #肩よりプラスの位置にあるか
 
 # Webカメラから入力
 cap = cv2.VideoCapture(0)
