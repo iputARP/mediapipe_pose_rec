@@ -3,14 +3,15 @@ from ultralytics import YOLO
 
 model = YOLO('yolov8n.pt')
 
-video_path = 0 # 本体に付属のカメラを指定
+video_path = 1 # 本体に付属のカメラを指定
 cap = cv2.VideoCapture(video_path)
+
 
 while cap.isOpened():
 	success, frame = cap.read()
 	if success:
-		# 推論を実行
-		results = model(frame)
+		# 推論を実行。人を検知
+		results = model.predict(frame,classes=0)
 
 		# キャプチャした画像サイズを取得
 		imageWidth = results[0].orig_shape[0]
@@ -21,16 +22,21 @@ while cap.isOpened():
 		classes = results[0].boxes.cls
 		boxes = results[0].boxes
 		annotatedFrame = results[0].plot()
-
+		count = 0
 		# 検出したオブジェクトのバウンディングボックス座標とオブジェクト名を取得し、ターミナルに出力
 		for box, cls in zip(boxes, classes):
 			name = names[int(cls)]
 			x1, y1, x2, y2 = [int(i) for i in box.xyxy[0]]
 			
+			#人物を区別させる
+			
+
+			timg = frame[x1:x2,y1:y2]
+			cv2.imwrite(f"{name}_timg{count}.jpg",timg)
 			print(f"Object: {name} Coordinates: StartX={x1}, StartY={y1}, EndX={x2}, EndY={y2}")
 			# バウンディングBOXの座標情報を書き込む
 			cv2.putText(annotatedFrame, f"{x1} {y1} {x2} {y2}", (x1, y1 - 40), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 255, 0), 2, cv2.LINE_AA)
-
+			count += 1
 		# プレビューウィンドウに画像出力
 		cv2.imshow("YOLOv8 Inference", annotatedFrame)
 	
