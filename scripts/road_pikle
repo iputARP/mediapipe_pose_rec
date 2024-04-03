@@ -1,0 +1,7 @@
+import pickle
+
+with open('data.pickle', mode='br') as fi:
+    keypoint_list = pickle.load(fi)
+
+
+print(keypoint_list[0].xy[0])
