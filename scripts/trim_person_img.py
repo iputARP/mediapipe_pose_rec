@@ -3,7 +3,7 @@ from ultralytics import YOLO
 
 model = YOLO('yolov8n.pt')
 
-video_path = 1 # 本体に付属のカメラを指定
+video_path = 0 # 本体に付属のカメラを指定
 cap = cv2.VideoCapture(video_path)
 
 
@@ -31,7 +31,7 @@ while cap.isOpened():
 			#人物を区別させる
 			
 
-			timg = frame[x1:x2,y1:y2]
+			timg = frame[y1:y2,x1:x2]
 			cv2.imwrite(f"{name}_timg{count}.jpg",timg)
 			print(f"Object: {name} Coordinates: StartX={x1}, StartY={y1}, EndX={x2}, EndY={y2}")
 			# バウンディングBOXの座標情報を書き込む
